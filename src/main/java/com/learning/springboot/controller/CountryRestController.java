@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +25,12 @@ import com.learning.springboot.model.Country;
 import com.learning.springboot.model.Language;
 import com.learning.springboot.service.ICountryRepository;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
+@Api(value = "country details")
 @RestController
 @RequestMapping("/countries")
 public class CountryRestController {
@@ -44,12 +53,19 @@ public class CountryRestController {
 	 * 
 	 * @return
 	 */
+
+	@ApiOperation(value = "View a list of available countries", response = List.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successfully retrieved list"),
+			@ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+			@ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+			@ApiResponse(code = 404, message = "The resource you were trying to reach is not found") })
 	@GetMapping("/all")
 	public ResponseEntity<List<Country>> retrieveAllCountries() {
 		List<Country> countries = this.iCountryRepository.findAll();
 		if (null == countries) {
 			return ResponseEntity.noContent().build();
 		}
+
 		return ResponseEntity.ok(countries);
 	}
 
@@ -60,12 +76,20 @@ public class CountryRestController {
 	 * @return
 	 */
 	@GetMapping("/country/{id}")
-	public ResponseEntity<Country> retrieveCountryById(@PathVariable Long id) {
+	public ResponseEntity<Resource<Country>> retrieveCountryById(@PathVariable Long id) {
 		Optional<Country> country = this.iCountryRepository.findById(id);
 		if (!country.isPresent()) {
 			return ResponseEntity.noContent().build();
 		}
-		return ResponseEntity.ok(country.get());
+
+		// add HATEOAS link to access all countries
+		Link link = ControllerLinkBuilder
+				.linkTo(ControllerLinkBuilder.methodOn(CountryRestController.class).retrieveAllCountries())
+				.withRel("all-countries");
+		Resource<Country> resource = new Resource<Country>(country.get());
+		resource.add(link);
+
+		return ResponseEntity.ok(resource);
 	}
 
 	/**
@@ -76,11 +100,14 @@ public class CountryRestController {
 	@PostMapping("/country")
 	public ResponseEntity<?> postCountryDetails(@RequestBody Country country) {
 		Country newCountry = new Country();
-		newCountry.setName(country.getName());
-		newCountry.setCode(country.getCode());
-
 		List<Language> languages = new ArrayList<>();
-		List<Language> temp = country.getLanguages();
+		List<Language> temp = null;
+		if (null != country) {
+			newCountry.setName(country.getName());
+			newCountry.setCode(country.getCode());
+			temp = country.getLanguages();
+		}
+
 		if (null != temp && !temp.isEmpty()) {
 			for (Language language : temp) {
 				languages.add(new Language(language.getName(), newCountry));

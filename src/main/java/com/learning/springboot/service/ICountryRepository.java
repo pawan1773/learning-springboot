@@ -14,10 +14,11 @@ import com.learning.springboot.model.Country;
 public interface ICountryRepository extends JpaRepository<Country, Long> {
 
 	Optional<Country> findByCode(String code);
-	
-	@Query("select c from Country c join fetch c.languages l where c.id = :cid and l.id = :lid")
-	Optional<Country> getSpecificLanguageOfCountry(@Param("cid")Long cid, @Param("lid")Long lid);
 
+	@Query("select c from Country c join fetch c.languages l where c.id = :cid and l.id = :lid")
+	Optional<Country> getSpecificLanguageOfCountry(@Param("cid") Long cid, @Param("lid") Long lid);
+
+	// We can directly use respository by uncommenting
 	// http://localhost:8081/country/search/findByName?name=India
 	// List<Country> findByName(@Param("name") String role);
 }

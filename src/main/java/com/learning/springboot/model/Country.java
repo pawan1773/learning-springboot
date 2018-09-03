@@ -14,6 +14,10 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel(description = "This entity contains country related properties")
 @Entity
 @Table(name = "COUNTRY")
 public class Country {
@@ -23,9 +27,11 @@ public class Country {
 	@Column(name = "COUNTRY_ID")
 	private Long id;
 
+	@ApiModelProperty(notes = "Country name.")
 	@Column(name = "COUNTRY_NAME", unique = true)
 	private String name;
 
+	@ApiModelProperty(notes = "Country code must be unique and less than 4 characters.")
 	@Column(name = "COUNTRY_CODE", unique = true)
 	private String code;
 
