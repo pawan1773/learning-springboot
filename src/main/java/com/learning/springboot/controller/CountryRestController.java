@@ -29,7 +29,7 @@ public class CountryRestController {
 	private final ICountryRepository iCountryRepository;
 
 	/**
-	 * Injecting ICountryRepository into CountryRestController
+	 * Injecting ICountryRepository dependency into CountryRestController.
 	 * 
 	 * @param iCountryRepository
 	 */
@@ -107,7 +107,7 @@ public class CountryRestController {
 			return ResponseEntity.noContent().build();
 		}
 		Country newCountry = fetchedCountry.get();
-		newCountry.setName(country.getName());
+		// newCountry.setName(country.getName());
 		newCountry.setCode(country.getCode());
 
 		Country updatedCountry = this.iCountryRepository.save(newCountry);
@@ -152,7 +152,7 @@ public class CountryRestController {
 	 */
 	@GetMapping("/country/{cid}/language/{lid}")
 	public ResponseEntity<Country> retrieveLanguageById(@PathVariable("cid") Long cid, @PathVariable("lid") Long lid) {
-		Optional<Country> country = this.iCountryRepository.findByIdAndLanguagesId(cid, lid);
+		Optional<Country> country = this.iCountryRepository.getSpecificLanguageOfCountry(cid, lid);
 		if (!country.isPresent()) {
 			return ResponseEntity.noContent().build();
 		}
