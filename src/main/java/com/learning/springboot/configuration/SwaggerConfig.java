@@ -3,6 +3,7 @@ package com.learning.springboot.configuration;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 
+import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
@@ -12,18 +13,22 @@ import springfox.documentation.spring.web.plugins.Docket;
 @Configurable
 public class SwaggerConfig {
 
+	public static final String SWAGGER_API_VERSION = "1.0";
+	public static final String LICENSE_TEXT = "License";
+	public static final String TITLE = "Learning Spring Boot";
+	public static final String DESCRIPTION = "This application is for learning purpose only.";
+	public static final String NAME = "Pawan Kumar";
+	public static final String URL = "www.learning-springboot.com";
+	public static final String EMAIL = "joginder.pawan@gmail.com";
+
 	@Bean
 	public Docket api() {
-		return new Docket(DocumentationType.SWAGGER_2).select()
-				.apis(RequestHandlerSelectors.basePackage("com.learning.springboot.controller"))
-				.build().apiInfo(metaData());
+		return new Docket(DocumentationType.SWAGGER_2).apiInfo(metaData()).select()
+				.apis(RequestHandlerSelectors.basePackage("com.learning.springboot.controller")).build();
 	}
 
 	private ApiInfo metaData() {
-		ApiInfo apiInfo = new ApiInfo("Spring Boot Learning REST API", "Spring Boot REST API for Learning Purpose", "1.0",
-				"Terms of service",
-				new Contact("Pawan Kumar", "https://joginder-pawan/about/", "joginder.pawan@gmail.com"),
-				"Apache License Version 2.0", "https://www.apache.org/licenses/LICENSE-2.0");
-		return apiInfo;
+		return new ApiInfoBuilder().title(TITLE).description(DESCRIPTION).contact(new Contact(NAME, URL, EMAIL))
+				.license(LICENSE_TEXT).version(SWAGGER_API_VERSION).build();
 	}
 }

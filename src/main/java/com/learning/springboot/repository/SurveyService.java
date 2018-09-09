@@ -1,4 +1,4 @@
-package com.learning.springboot.service;
+package com.learning.springboot.repository;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;

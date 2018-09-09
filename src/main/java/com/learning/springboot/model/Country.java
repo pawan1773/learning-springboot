@@ -22,12 +22,13 @@ import io.swagger.annotations.ApiModelProperty;
 @Table(name = "COUNTRY")
 public class Country {
 
+	@ApiModelProperty(notes = "Unique auto-generated id for each country.")
 	@Id
 	@GeneratedValue
 	@Column(name = "COUNTRY_ID")
 	private Long id;
 
-	@ApiModelProperty(notes = "Country name.")
+	@ApiModelProperty(notes = "Name of the country.")
 	@Column(name = "COUNTRY_NAME", unique = true)
 	private String name;
 
@@ -35,6 +36,7 @@ public class Country {
 	@Column(name = "COUNTRY_CODE", unique = true)
 	private String code;
 
+	@ApiModelProperty(notes = "List of languages that are being used in a particular country.")
 	@JacksonXmlElementWrapper(localName = "languages")
 	@JacksonXmlProperty(localName = "languages")
 	@OneToMany(mappedBy = "country", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)

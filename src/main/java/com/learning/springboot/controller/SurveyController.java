@@ -14,7 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.learning.springboot.model.Question;
 import com.learning.springboot.model.Survey;
-import com.learning.springboot.service.SurveyService;
+import com.learning.springboot.repository.SurveyService;
 
 @RestController
 class SurveyController {

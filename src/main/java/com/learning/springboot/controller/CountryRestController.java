@@ -23,7 +23,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.learning.springboot.model.Country;
 import com.learning.springboot.model.Language;
-import com.learning.springboot.service.ICountryRepository;
+import com.learning.springboot.repository.ICountryRepository;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

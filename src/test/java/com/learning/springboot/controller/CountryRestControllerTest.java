@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.learning.springboot.model.Country;
 import com.learning.springboot.model.Language;
-import com.learning.springboot.service.ICountryRepository;
+import com.learning.springboot.repository.ICountryRepository;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value = CountryRestController.class)
